@@ -1,0 +1,41 @@
+<.header>
+  Listing Apartment
+  <:actions>
+    <.link patch={~p"/apartment/new"}>
+      <.button>New Apartment</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table
+  id="apartment"
+  rows={@streams.apartment_collection}
+  row_click={fn {_id, apartment} -> JS.navigate(~p"/apartment/#{apartment}") end}
+>
+  <:col :let={{_id, apartment}} label="Name">{apartment.name}</:col>
+  <:action :let={{_id, apartment}}>
+    <div class="sr-only">
+      <.link navigate={~p"/apartment/#{apartment}"}>Show</.link>
+    </div>
+    <.link patch={~p"/apartment/#{apartment}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={{id, apartment}}>
+    <.link
+      phx-click={JS.push("delete", value: %{id: apartment.id}) |> hide("##{id}")}
+      data-confirm="Are you sure?"
+    >
+      Delete
+    </.link>
+  </:action>
+</.table>
+
+<.modal :if={@live_action in [:new, :edit]} id="apartment-modal" show on_cancel={JS.patch(~p"/apartment")}>
+  <.live_component
+    module={HouseWeb.ApartmentLive.FormComponent}
+    id={@apartment.id || :new}
+    title={@page_title}
+    action={@live_action}
+    apartment={@apartment}
+    patch={~p"/apartment"}
+  />
+</.modal>

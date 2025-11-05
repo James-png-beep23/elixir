@@ -1,0 +1,27 @@
+<%= for n <- @apartments do %>
+  <table class="min-w-full border-collapse border border-gray-300 mb-6">
+    <thead class="bg-gray-100">
+      <tr>
+        <th class="border px-4 py-2">Apartment Name</th>
+        <th class="border px-4 py-2">Floor Name</th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= for {f, index} <- Enum.with_index(n.floors) do %>
+        <tr>
+          <%= if index == 0 do %>
+            <td class="border px-4 py-2" rowspan={length(n.floors)}><%= n.name %></td>
+          <% end %>
+          <td class="border px-4 py-2"><%= f.name %></td>
+        </tr>
+      <% end %>
+
+      <%= if Enum.empty?(n.floors) do %>
+        <tr>
+          <td class="border px-4 py-2"><%= n.name %></td>
+          <td class="border px-4 py-2 text-gray-500 italic">No floors yet</td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>

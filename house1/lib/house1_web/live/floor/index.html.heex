@@ -1,0 +1,39 @@
+<div class="p-6 max-w-md mx-auto">
+  <h1 class="text-2xl font-bold mb-4">Manage Floors</h1>
+
+  <!-- Dropdown to select apartment -->
+  <form phx-change="select_apartment">
+    <select name="apartment_id" class="border p-2 rounded w-full mb-4">
+      <option value="">-- Select Apartment --</option>
+      <%= for apt <- @apartments do %>
+        <option value={apt.id} selected={@selected_apartment_id == apt.id}>
+          <%= apt.name %> - <%= apt.location %>
+        </option>
+      <% end %>
+    </select>
+  </form>
+
+  <%= if @selected_apartment_id do %>
+    <form phx-submit="create_floors">
+      <input
+        type="number"
+        name="floor_count"
+        value={@new_floor_count}
+        placeholder="Number of floors"
+        phx-change="update_floor_count"
+        class="border p-2 rounded mb-2 w-full"
+        min="1"
+      />
+      <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">
+        Create Floors
+      </button>
+    </form>
+
+    <h2 class="mt-6 text-xl font-semibold">Existing Floors:</h2>
+    <ul class="list-disc pl-5 mt-2">
+      <%= for floor <- @floors do %>
+        <li><%= floor.name %> - Units: <%= floor.number_units %></li>
+      <% end %>
+    </ul>
+  <% end %>
+</div>
